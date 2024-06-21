@@ -406,60 +406,78 @@
 								<p>Since 7,August 2019 (Wed) </p>
 							</section>
 							
-							
-							<!--Today Date-->
-							<section>
-							<header class="major">
-										<h2>Visiting Time</h2>
-										
-									</header>
-<body>
-<div>
-	<p><span id="currentDate"> </span><span> </span><span id="currentDay"> </span><span> </span><span id="currentTime"> </span></p>
-</div>
+	<!--Today's Date-->					
+	<section>
+  <header class="major">
+    <h2>Local Visiting Time</h2>
+  </header>
+  <div id="visitingTime">
+    <p id="visitingTimeDisplay"></p>
+  </div>
 
-<script>
-  // Update time function
-  function updateClock() {
-    var today = new Date();
+  <header class="major">
+    <h2>Taiwan Time</h2>
+  </header>
+  <div id="taiwanTime">
+    <p id="taiwanTimeDisplay"></p>
+  </div>
 
-    // Define array of weekdays in English
-    var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  <script>
+    // Function to update visiting time and Taiwan time
+    function updateTimes() {
+      var today = new Date();
 
-    // Get the day of the week
-    var dayOfWeek = weekdays[today.getDay()];
+      // Define array of weekdays in English
+      var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-    // Get year, month, day
-    var year = today.getFullYear();
-    var month = today.getMonth() + 1; // getMonth() returns 0-11, so we add 1
-    var day = today.getDate();
+      // Get the day of the week for visiting time
+      var visitingDayOfWeek = weekdays[today.getDay()];
 
-    // Get hours, minutes, seconds
-    var hours = today.getHours();
-    var minutes = today.getMinutes();
-    var seconds = today.getSeconds();
+      // Get the day of the week for Taiwan time
+      var taiwanDayOfWeek = weekdays[today.getUTCDay()];
 
-    // Format date as YYYY-MM-DD
-    var formattedDate = year + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
+      // Get year, month, day
+      var year = today.getFullYear();
+      var month = today.getMonth() + 1; // getMonth() returns 0-11, so we add 1
+      var day = today.getDate();
 
-    // Format time as HH:MM:SS
-    var formattedTime = (hours < 10 ? '0' + hours : hours) + ':' + (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0' + seconds : seconds);
+      // Get hours, minutes, seconds
+      var hours = today.getHours();
+      var minutes = today.getMinutes();
+      var seconds = today.getSeconds();
 
-    // Display weekday (in parentheses), date, and time in the HTML
-    document.getElementById('currentDay').textContent = '(' + dayOfWeek + ')';
-    document.getElementById('currentDate').textContent = formattedDate;
-    document.getElementById('currentTime').textContent = formattedTime;
-  }
+      // Format date as YYYY-MM-DD
+      var formattedDate = year + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
 
-  // Initially load time
-  updateClock();
+      // Format time as HH:MM:SS
+      var formattedTime = (hours < 10 ? '0' + hours : hours) + ':' + (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0' + seconds : seconds);
 
-  // Update time every second
-  setInterval(updateClock, 1000);
-</script>
+      // Get UTC offset in hours for visiting time
+      var utcOffsetHours = -today.getTimezoneOffset() / 60;
+      var utcOffsetString = (utcOffsetHours >= 0 ? '+' : '-') + (Math.abs(utcOffsetHours) < 10 ? '0' + Math.abs(utcOffsetHours) : Math.abs(utcOffsetHours));
 
-</body>
-				</section>
+      // Display visiting time in the HTML
+      var visitingTimeText = formattedDate + ' (' + visitingDayOfWeek + ') ' + formattedTime + ' （UTC' + utcOffsetString + '）';
+      document.getElementById('visitingTimeDisplay').textContent = visitingTimeText;
+
+      // Get Taiwan time (UTC+8)
+      var taiwanTime = year + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day) + ' (' + taiwanDayOfWeek + ') ' + (hours < 10 ? '0' + hours : hours) + ':' + (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0' + seconds : seconds) + ' （UTC+08）';
+
+      // Display Taiwan time in the HTML
+      document.getElementById('taiwanTimeDisplay').textContent = taiwanTime;
+    }
+
+    // Initially load visiting time and Taiwan time
+    updateTimes();
+
+    // Update both times every second to ensure accuracy
+    setInterval(updateTimes, 1000);
+  </script>
+</section>
+
+
+
+
 					
 
 							<!-- Footer -->
